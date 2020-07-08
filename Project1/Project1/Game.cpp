@@ -1,8 +1,12 @@
 #include "Game.h"
 
+const int thickness = 15;
+const float paddleH = 100.0f;
+
 Game::Game():
 mWindow(nullptr),
-mIsRunning(true)
+mIsRunning(true),
+mRenderer(nullptr)
 {}
 
 bool Game::Initialize() {
@@ -19,6 +23,11 @@ bool Game::Initialize() {
 	}
 
 	mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+	mPaddlePos.x = 10.0f;
+	mPaddlePos.y = 768.0f / 2.0f;
+	mBallPos.x = 1024.0f / 2.0f;
+	mBallPos.y = 768.0f / 2.0f;
 
 	return true;
 }
@@ -55,4 +64,32 @@ void Game::ProcessInput() {
 
 void Game::UpdateGame() {};
 
-void Game::GenerateOutput() {};
+void Game::GenerateOutput() {
+	SDL_SetRenderDrawColor(mRenderer, 0, 0, 255, 255);
+	SDL_RenderClear(mRenderer);
+
+	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
+
+	SDL_Rect wall{
+	0,0,1024,thickness
+	};
+	SDL_RenderFillRect(mRenderer, &wall);
+
+	SDL_Rect paddle{
+		static_cast<int>(mPaddlePos.x),
+		static_cast<int>(mPaddlePos.y - paddleH / 2),
+		thickness,
+		static_cast<int>(paddleH)
+	};
+	SDL_RenderFillRect(mRenderer, &paddle);
+
+	SDL_Rect ball{
+		static_cast<int>(mBallPos.x - thickness / 2),
+		static_cast<int>(mBallPos.y - thickness / 2),
+		thickness,
+		thickness
+	};
+	SDL_RenderFillRect(mRenderer, &ball);
+
+	SDL_RenderPresent(mRenderer);
+};

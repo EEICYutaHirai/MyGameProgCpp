@@ -5,6 +5,12 @@
 
 #include "SDL.h"
 
+struct Vector2
+{
+	float x;
+	float y;
+};
+
 class Game
 {
 public:
@@ -21,6 +27,9 @@ private:
 	SDL_Window* mWindow;
 	SDL_Renderer* mRenderer;
 	bool mIsRunning;
+
+	Vector2 mPaddlePos;
+	Vector2 mBallPos;
 };
 
 #endif // !INCLUDED_GAME_H_
